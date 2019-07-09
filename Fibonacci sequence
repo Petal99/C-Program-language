@@ -1,0 +1,16 @@
+#include <stdio.h>  
+int main()
+{
+  long long int a=1,b=1,c,i=1;
+	do{
+		c=a+b;
+		printf("%lld\n",c);
+		a=b;
+		b=c;
+		i++;
+	}
+	while(c<=100000000000000000);
+	printf("i=%d",i);
+	return 0;
+}
+
