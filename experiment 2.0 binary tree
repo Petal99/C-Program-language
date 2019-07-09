@@ -1,0 +1,126 @@
+#include <iostream>
+#include <string>
+#define Maxsize 100
+using namespace std;
+
+//二叉树的链式存储定义 
+typedef struct BiTNode {
+	char data;
+	struct BiTNode *lchild,*rchild;
+}BiTNode,*BiTree;
+
+//先序遍历建立二叉链表
+void CreateBiTree (BiTree &T)
+{
+	char ch;
+	cin>>ch;
+	if(ch=='#') T=NULL;//当输入#时结束递归 
+	else 
+	{
+		T=new BiTNode;
+		T->data=ch;
+		CreateBiTree (T->lchild);
+		CreateBiTree (T->rchild);
+	}
+} 
+
+//二叉树的前序遍历并输出数据 
+void QInOrderTraverse (BiTree T)
+{
+	if(T)
+	{
+		cout<<T->data<<endl;
+		QInOrderTraverse (T->lchild);
+		QInOrderTraverse (T->rchild);
+	}
+} 
+
+//二叉树的中序遍历并输出数据 
+void ZInOrderTraverse (BiTree T)
+{
+	if(T)
+	{
+		ZInOrderTraverse (T->lchild);
+		cout<<T->data<<endl;
+		ZInOrderTraverse (T->rchild);
+	}
+} 
+
+//二叉树的后序遍历并输出数据 
+void HInOrderTraverse (BiTree T)
+{
+	if(T)
+	{
+		HInOrderTraverse (T->lchild);
+		HInOrderTraverse (T->rchild);
+		cout<<T->data<<endl;
+	}
+} 
+
+//统计二叉树的叶子节点个数 
+int LeafNodeCount (BiTree T)
+{
+	if(T==NULL)
+	   return 0;
+	else if(T->lchild==NULL&&T->rchild==NULL)
+	   return 1;
+	else 
+	    return LeafNodeCount (T->lchild)+LeafNodeCount (T->rchild);
+} 
+ 
+//统计二叉树节点个数
+int NodeCount (BiTree T)
+{
+	if(T==NULL) return 0;
+	else return NodeCount(T->lchild)+NodeCount(T->rchild)+1;
+} 
+
+//计算二叉树的深度
+int Depth(BiTree T) 
+{
+	int m,n;
+	if(T==NULL) return 0;
+	else 
+	{
+		m=Depth(T->lchild);
+		n=Depth(T->rchild);
+		if(m>n) return (m+1);
+		else return (n+1);
+	}
+}
+
+//交换每个节点的左孩子和右孩子 
+void Exchange (BiTree &T)
+{
+	BiTree tem;
+	if(T!=NULL)
+	{
+		tem=T->lchild;
+		T->lchild=T->rchild;
+		T->rchild=tem;
+		Exchange (T->lchild);
+		Exchange (T->rchild);
+	}
+} 
+
+
+int main ()
+{
+	BiTree T;
+	cout<<"建立二叉树"<<endl;
+	CreateBiTree (T);
+	cout<<"先序遍历输出二叉树"<<endl;
+	QInOrderTraverse (T);
+	cout<<"中序遍历输出二叉树"<<endl;
+	ZInOrderTraverse (T);
+	cout<<"后序遍历输出二叉树"<<endl;
+	HInOrderTraverse (T);
+	cout<<"二叉树的叶子节点个数为："<<LeafNodeCount (T)<<endl;
+	cout<<"二叉树的节点总数为："<<NodeCount (T)<<endl;
+	cout<<"二叉树的深度为："<<Depth(T)<<endl;
+	Exchange (T);
+	cout<<"交换二叉树左右孩子后先序遍历输出结果为："<<endl; 
+	QInOrderTraverse (T);
+	return 0;	
+}
+
