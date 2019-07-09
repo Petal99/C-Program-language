@@ -1,0 +1,128 @@
+#include<stdio.h>
+#include<windows.h>
+#include<math.h>
+#define p 3.1415926
+#define r p/180 //r=p/180,p=3.14....,p/180是求的1弧度，下面sin(里面要求的是弧度)，sin（30弧度）=0.5。 void main()
+int main() 
+{
+float i,j,k;
+int l,m,n,a[10];
+char cmd;
+LOOP:
+system("cls");
+printf("***********************\n");
+printf("*******花伴计算器******\n");
+printf("***********************\n");
+printf("\n\n本计算器提供+、-、*、/四种运算。\n");
+printf("p-代表圆周率pai。\n");
+printf("a-代表十进制转换为二进制。\n");
+printf("b-代表十进制转换为八进制。\n");
+printf("c-代表十进制转换为十六进制。\n");
+printf("d-代表该数值开方。\n");
+printf("e-代表该数值开立方。\n");
+printf("f-代表求几次方。\n");
+printf("S-代表sin。\n");
+printf("C-代表cos。\n");
+printf("T-代表tan。\n");
+printf("\n\n请输入要计算的数字和运算符号，输入“#”时，结束；输入“！”时复位。\n");
+
+scanf("%f",&k);
+while((cmd=getchar())!='#')
+{
+if(i!=0)
+switch(cmd)
+{
+case '+': scanf("%f",&i);
+k=k+i;
+printf("=%5.2f",k);break; 
+case '-': scanf("%f",&i);
+k=k-i;
+printf("=%5.2f",k);
+break; case '*': scanf("%f",&i);
+k=k*i;
+printf("=%5.2f",k);
+break; case '/': scanf("%f",&i);
+k=k/i;
+printf("=%5.2f",k);
+break;
+
+case 'p': k=k*p;
+printf("%6.4f",k);
+break; case 'f': printf("请输入要求该数字的几次方：");
+scanf("%d",&n);
+i=k;
+for(m=0;m<n-1;m++)
+k=k*i;
+printf("%5.2f",k);
+break; case 'a': printf("转换成二进制\n");
+m=0;
+
+while((int)k>0)
+{
+l=k;
+k=k/2;
+l=l%2;
+a[m]=l;
+m++;
+}
+for(n=m-1;n>=0;n--)
+printf("%d",a[n]);
+break; case 'b': printf("转换成八进制\n");
+printf("0");
+m=0;
+while((int)k>0)
+{
+l=k;
+k=k/8;
+l=l%8;
+a[m]=l;
+m++;
+}
+for(n=m-1;n>=0;n--)
+printf("%o",a[n]);
+break;
+
+case 'c': printf("转换成十六进制\n");
+printf("0x");
+m=0;
+while((int)k>0)
+{
+l=k;
+k=k/16;
+l=l%16;
+a[m]=l;
+m++;
+}
+for(n=m-1;n>=0;n--)
+printf("%x",a[n]);
+break;
+case 'e': printf("该数值开立方得\n");
+i=pow(k,1.0/3);
+printf("%5.2f",i );
+break;
+
+case 'd': printf("该数值开方得\n");
+i=k/2;
+j=sqrt(k);
+printf("%5.2f",j);
+break; case 'S': k=k*r;
+i=sin(k);
+printf("%5.2f",i);
+break;
+
+case 'C': k=k*r;
+i=cos(k);
+printf("%5.2f",i);
+break; case 'T': k=k*r;
+i=tan(k);
+printf("%5.2f",i);
+break; case '!': goto LOOP;
+
+}
+
+}
+}
+
+     
+
+
