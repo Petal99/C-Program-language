@@ -1,0 +1,23 @@
+#include<stdio.h>
+#include<cstdio>
+#include<math.h>
+#include<cstdlib>
+int main()
+{
+	double a,b,c,disc,x1,x2,p,q;
+	printf("输入abc的值（空格隔开）");
+	scanf("%lf %lf %lf",&a,&b,&c);
+	disc=b*b-4*a*c;
+	if(disc<0)
+	    printf("无实根");
+	else
+	{
+		p=-b/(2.0*a);
+		q=sqrt(disc)/(2.0*a);
+		x1=p+q;
+		x2=p-q;
+		printf("x1=%lfx2=%lf",x1,x2);	
+	} 
+	system("pause");
+	return 0;
+} 
