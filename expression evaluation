@@ -1,0 +1,173 @@
+#include <iostream>
+#define maxsize 100
+#define error 0
+#define ok 0
+using namespace std;
+
+typedef struct {
+	char *base;
+	char *top;
+	int stacksize;
+}SqStack_char;
+
+typedef struct {
+	int *base;
+	int *top;
+	int stacksize;
+}SqStack_int;
+
+//字符型线性栈的初始化 
+int InitStack_char(SqStack_char &S)
+{
+	S.base=new char[maxsize];
+	if(!S.base) return 0;
+	S.top=S.base;
+	S.stacksize=maxsize;
+	return 1;
+}
+
+//整型线性栈的初始化 
+int InitStack_int(SqStack_int &S)
+{
+	S.base=new int[maxsize];
+	if(!S.base) return 0;
+	S.top=S.base;
+	S.stacksize=maxsize;
+	return 1;
+}
+
+//字符型线性栈的压入
+int Push(SqStack_char &S,char e) 
+{
+	if(S.top-S.base==S.stacksize) return error;
+	*S.top++=e;
+	return ok;
+}
+
+//整型线性栈的压入
+int Push(SqStack_int &S,int e) 
+{
+	if(S.top-S.base==S.stacksize) return error;
+	*S.top++=e;
+	return ok;
+}
+
+//字符型栈顶元素弹出
+char Pop_char(SqStack_char &s,char &e) 
+{
+	if(s.top==s.base) return error;
+	e=*--s.top;
+	return ok;
+}
+
+//整型栈顶元素弹出
+int Pop_int(SqStack_int &s,int &e) 
+{
+	if(s.top==s.base) return error;
+	e=*--s.top;
+	return ok;
+}
+
+
+//取整型栈顶元素
+int GetTop_int(SqStack_int S)
+{
+	if(S.top!=S.base)
+	 return *(S.top-1);
+} 
+
+//取字符型栈顶元素
+char GetTop_char(SqStack_char S)
+{
+	if(S.top!=S.base)
+	 return *(S.top-1);
+} 
+
+//判断是否为运算符
+int if_oper(char ch)
+{
+	if(ch!=35&&ch!=40&&ch!=41&&ch!=42&&ch!=43&&ch!=45&&ch!=47)
+	return 0;
+	else 
+	return 1;
+} 
+
+//比较运算符的优先级
+char Precede(char a,char b)
+{
+	if((a=='+'||a=='-')&&(b=='+'||b=='-'||b==')'||b=='#'))
+	 return '>';
+	else if((a=='*'||a=='/')&&(b=='+'||b=='-'||b==')'||b=='#'||b=='*'||b=='/'))
+	 return '>';
+	else if(a==')'&&b!='(')
+	 return '>';
+	else if((a=='+'||a=='-')&&(b=='*'||b=='/'||b=='('))
+	return '<';
+	else if((a=='*'||a=='/')&&b=='(')
+	return '<';
+	else if((a=='('||a=='#')&&b!=')'&&b!='#')
+	return '<';
+	else if((a=='('&&b==')')||(a=='#'&&b=='#'))
+	return '=';
+	else 
+	return 'f';	
+} 
+
+//字符型数字转换成整型
+int exchange_char_to_int(char a)
+{
+	return (int)(a-'0');
+} 
+
+int Operate(int a,char c,int b)
+{
+	switch(c)
+	{
+		case '+':return (a+b);break;
+		case '-':return (a-b);break;
+		case '*':return (a*b);break;
+		case '/':return (a/b);break; 
+	}
+}
+
+
+
+int main ()
+{
+	SqStack_char optr;
+	SqStack_int opnd;//定义栈 
+	char ch,theta,x;
+	int a,b;
+	
+	InitStack_char(optr);
+	InitStack_int(opnd);//初始化栈 
+	
+	//打印提示信息
+	cout<<"请在英文状态下输入表达式（其中#代表等号）" <<endl;
+	
+	Push(optr,'#');
+	cin>>ch;
+	
+	while(ch!='#'||GetTop_char(optr)!='#')
+	{
+		if(!if_oper(ch)){Push(opnd,exchange_char_to_int(ch));cin>>ch;}
+		else
+		 switch(Precede(GetTop_char(optr),ch))
+		 {
+		 	case '<':
+		 		Push(optr,ch);cin>>ch;
+		 		break;
+		 	case'>':
+		 		Pop_char(optr,theta);//弹出optr栈中运算符 
+		 		Pop_int(opnd,b);
+		 		Pop_int(opnd,a);//弹出opnd栈中两个数 
+		 		Push(opnd,Operate(a,theta,b));
+		 		break;
+		 	case'=':
+			    Pop_char(optr,x);cin>>ch;
+			    break;
+		 }
+	}
+	cout<<"the resualt is "<<GetTop_int(opnd)<<endl;
+	return 0;
+}
