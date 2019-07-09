@@ -1,0 +1,39 @@
+#include<stdio.h>
+#include <stdlib.h> 
+int main()
+{
+	void tongji(char string[1024]);
+	int i;
+	char string[1024];
+	printf("input a sentence\n");
+	gets(string);
+	tongji(string);
+	system("pause");
+	return 0;
+}
+void tongji(char string[1024])
+{
+	char ch;
+	int i=0,da=0,xiao=0,kong=0,qi=0,shu=0;
+	ch=string[0];
+	while(ch!='\0')
+	{
+		if(ch<=122&&ch>=97)
+		xiao++;
+		else if(ch>=65&&ch<=90)
+		da++;
+		else if(ch>=48&&ch<=57&&(string[i-1]<48||string[i-1]>57))
+		shu++;
+		else if(ch==32)
+		kong++;
+		else
+		qi++;
+		i++;
+		ch=string[i];
+    }
+    printf("da=%d\n",da);
+    printf("xiao=%d\n",xiao);
+    printf("shu=%d\n",shu);
+    printf("kong=%d\n",kong);
+    printf("qi=%d\n",qi);
+}
