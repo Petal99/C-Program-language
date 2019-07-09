@@ -1,0 +1,74 @@
+#include <stdio.h>
+#define MAX 10
+int used[MAX];           //用来标记数字是否已经在前面使用过
+int result[MAX];       //存放结果
+int p[MAX];
+int N;
+void print()      //输出结果
+{
+	int i;
+	for(i=0;i<N;i++)
+	p[i]=result[i];
+}
+void proc(int step)    //step用来记录已经摆好了几个数
+{
+	int i;
+	if(step==N)     //如果已经摆好了N个数，那么结果就产生了，就输出结果
+		print();
+	else
+	{
+		for(i=0;i<N;i++)  //枚举1-N，找到没有使用过的最小的数
+		{
+			if(!used[i])  //没有使用过
+			{
+				used[i]=1;  //标记i已经使用
+				result[step]=i+1;  //记录结果
+				proc(step+1);  //递归求解
+				used[i]=0;   //这里就是所谓的回溯，也许比较难理解，你可以人工走一遍加深理解。其实回溯的主要想法是"还原现场".当执行到这一步时，i+1 这个数放在第step个位置的情况已经解决了，我们就要拿出i+1这个数，把它标记为未使用。
+			}
+		}
+	}
+}
+
+
+int main ()
+{
+	int nixushu(int),t;
+	int a[1024][1024],b[1024],n,i,j;
+	printf("input n");
+	scanf("%d",&n);
+	N=n;
+	printf("input martrix(n)");
+	for (i=0;i<n;i++)
+	{
+		for (j=0;j<n;j++)
+		{
+			scanf("%d",&a[i][j]);
+		}
+	}
+	for(i=0;i<n;i++)
+	{
+		b[i]=nixushu(p[n]);
+	}
+    for(i=0;i<n;i++)
+    printf("%d",b[i]);
+    proc(0);
+	return 0;
+} 
+int nixushu(int a[])
+{
+	int n=1024;
+	int t=0,i,j;
+	for(i=0;i<n;i++)
+	{
+		for(j=0;j<n-i;j++)
+		{
+			if(a[i]>a[j])			
+		{
+			t++;
+		}	
+		}
+	}
+	return(t);
+}
+
