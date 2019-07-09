@@ -1,0 +1,151 @@
+# include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+struct Stu
+	{
+		char name[15];
+		float grd[6];
+	}student[11];
+int main ()
+{
+	//定义和声明 
+	FILE*fp;
+	int stuaver(struct Stu*p);
+	int subaver(struct Stu*p);
+	int max(struct Stu*p);
+	float fangcha(struct Stu*p);
+	int i,j,num1,num2;
+	struct Stu*p;
+	
+	p=student;//指针变量赋值 
+	
+	
+	//打开文件 
+	if((fp=fopen("成绩.txt","r"))==NULL)
+	{
+		printf("无法打开文件\n");
+		exit(0);
+	}
+	
+	
+	//从文件读取学生姓名和成绩数据 
+	for(i=0;i<10;i++)
+	{
+		fscanf(fp,"%s %f %f %f %f %f",(p+i)->name,&(p+i)->grd[0],&(p+i)->grd[1],&(p+i)->grd[2],&(p+i)->grd[3],&(p+i)->grd[4]);
+	}
+	printf("\t\t\tmath\t\tEnglish\t\tc program\tCAD\t\tHTML\t\taver\n");
+	
+	
+	stuaver(p);//调用学生平均分函数 
+	
+    strcpy((p+10)->name,"average\t");//给student[11].name赋值字符串 
+	
+	subaver(p);//调用科目平均分函数 
+		
+	(p+10)->grd[5]=0;//给平均分的平均分置零
+	
+	num1=max(p)/10;
+	num2=max(p)-num1*10;
+		
+		
+	//按格式输出所有数据 
+	for(i=0;i<11;i++)
+	{
+		printf("%s\t\t%.1f\t\t%.1f\t\t%.1f\t\t%.1f\t\t%.1f\t\t%.1f\n",(p+i)->name,(p+i)->grd[0],(p+i)->grd[1],(p+i)->grd[2],(p+i)->grd[3],(p+i)->grd[4],(p+i)->grd[5]);
+	}
+	
+	
+	printf("最高分是:\n");
+	printf("%s\n",(p+num1)->name);
+	switch(num2)
+	{
+		case 0:printf("math\n");break;
+		case 1:printf("English\n");break;
+		case 2:printf("c program\n");break;
+		case 3:printf("CAD\n");break;
+		case 4:printf("HTML\n");break;
+	}
+	
+	
+	printf("学生平均分的方差为%.1f\n",fangcha(p));
+	
+	
+	fclose(fp);
+	system("pause");
+	return 0;
+}
+
+
+//学生平均分函数 
+void stuaver(struct Stu*p)
+{
+	int i;
+	//求每人的平均分 
+	for(i=0;i<10;i++)
+	{
+		(p+i)->grd[5]=0.2*((p+i)->grd[0]+(p+i)->grd[1]+(p+i)->grd[2]+(p+i)->grd[3]+(p+i)->grd[4]);
+	}
+
+}
+
+
+
+//科目平均分函数 
+void subaver(struct Stu*p)
+{
+	int i,j;
+	//给每一科的平均分置零 
+	for(i=0;i<5;i++)
+	(p+10)->grd[i]=0;
+	
+	//计算每一科的平均分并存在grd[5]中 
+	for(i=0;i<6;i++)
+	{
+		for(j=0;j<10;j++)
+		{
+			(p+10)->grd[i]=(p+10)->grd[i]+(p+j)->grd[i];
+		}
+		(p+10)->grd[i]=0.1*(p+10)->grd[i];
+	}
+
+}
+
+//找50个成绩中的最大并记录学生姓名和科目 
+int max(struct Stu*p)
+{
+	int i,j,number,temp=0;
+	for(i=0;i<10;i++)
+	{
+		for (j=0;j<4;j++)
+		{
+			if((p+i)->grd[j]>temp)
+			{
+			temp=(p+i)->grd[j];
+			number=10*i+j;	//用十位和个位分别记录两个位置信息，在主函数中再拆开 
+			}
+		} 
+	}
+	return number;
+}
+
+//计算平均分方差并以float形式返回 
+float fangcha(struct Stu*p)
+{
+	int i;
+	float sum1=0,sum2=0,fangcha;
+	for(i=0;i<10;i++)
+	{
+		sum1=sum1+(p+i)->grd[5]*(p+i)->grd[5];
+	}
+	for(i=0;i<10;i++)
+	{
+		sum2=sum2+(p+i)->grd[5];
+	}
+	fangcha=sum1/10-(sum2/10)*(sum2/10);
+	return fangcha;
+}
+
+
+
+
+
