@@ -1,0 +1,207 @@
+#include <iostream>
+#include <string>
+#define ok 1
+#define error 0
+using namespace std;
+//定义单链表 
+typedef struct LNode {
+	int number;
+	string name;
+	double price;
+	struct LNode *next;
+}BOOK,*Book;
+
+void CreateBookList (Book &list,int n) //创建长度为n的图书链表并输入信息 
+{
+	list=new BOOK;
+	list->next=NULL;
+	int i;
+	Book r,p;
+	r=list;
+	for (i=0;i<n;i++)
+	{
+		p=new LNode;
+		cout<<"输入书号"<<endl;
+		cin>>p->number;
+		cout<<"输入书名"<<endl;
+		cin>>p->name;
+		cout<<"输入书价格"<<endl;
+		cin>>p->price;
+		p->next=NULL;
+		r->next=p;
+		r=p;
+	}	
+}
+
+int Search_By_Name (Book b1,string str,int &nu,double &pr)//通过书名查找 
+{
+	nu=-1;
+	pr=-1;
+	Book b;
+	b=b1;
+	while (b->next)
+	{
+		if(str==b->name)
+		{
+			nu=b->number;
+			pr=b->price;
+			return ok;//若找到书，则返回1，并将信息存在变量中 
+		}
+		b=b->next;
+	}
+	return error;//若没找到，则返回0，此时nu和pr中值为负（错误值） 
+}
+
+
+Book Search_By_Number(Book b1,int n)//通过位置查找书，返回整个节点 
+{
+	int L_length(Book L);
+	Book b;
+	b=b1;
+	int i;
+    if(n>L_length(b1))
+    {
+    	cout<<"input error"<<endl;//如果n大于链表长度，报错并返回空指针 
+    	return NULL;
+    }
+    for (i=0;i<n;i++)
+	{
+		b=b->next;
+	} 
+	return b;
+} 
+
+
+int BookInsert (Book &B,int i)//给定一个图书信息，插入到表中指定的位置
+{
+	Book p,s;
+	int j=0;
+	p=B;
+	while (p&&(j<i-1))
+	{
+		p=p->next;
+		j++;
+	}
+	if(!p||j>i-1) return error;
+	s= new BOOK;
+	cout<<"输入书号"<<endl;
+	cin>>s->number;
+	cout<<"输入书名"<<endl;
+	cin>>s->name;
+	cout<<"输入书价格"<<endl;
+	cin>>s->price;
+	s->next=p->next;
+	p->next=s;
+	return ok;
+}
+
+
+int BookDelete (Book &B,int i)// 删除指定位置的图书记录
+{
+	Book p,q;
+	int j=0;
+	p=B;
+	while (p&&(j<i-1))
+	{
+		p=p->next;
+		j++;
+	}
+	if(!p||j>i-1) return error;
+	q=p->next;
+	p->next=q->next;
+	delete q;
+	return ok;
+}
+
+int L_length(Book L)//统计图书个数 
+{
+	Book p;
+	int len,i=0;
+	p=L->next; 
+	while (p)
+	{
+		i++;
+		p=p->next;
+	}
+	return (i);
+} 
+
+
+int main () 
+{
+	Book bl;
+	int len;
+	cout<<"输入书本个数"<<endl;
+	cin>>len;
+	CreateBookList (bl,len);
+	int x;
+	cout<<"对图书列表的操作如下："<<endl;
+	while(x)
+	{
+	   cout<<"（1）据书名进行查找，返回此书的书号和定价"<<endl;
+	   cout<<"（2）根据指定的位置可返回相应的图书信息（书号，书名，定价）"<<endl;
+	   cout<<"（3）给定一个图书信息，插入到表中指定的位置"<<endl;
+	   cout<<"（4）删除指定位置的图书记录"<<endl;
+	   cout<<"（5）统计表中图书个数"<<endl;
+	   cout<<"（6）离开"<<endl;
+	   cin>>x;
+	   switch (x)
+	   	{
+	   		case 1: 
+			   {
+			   	string str;
+			   	int nu;
+			   	double pr;
+			   	cout<<"输入书名"<<endl;
+			   	cin>>str;
+			   	if(Search_By_Name (bl,str,nu,pr))
+			   	   cout<<"书号为："<<nu<<endl<<"书价格为："<<pr<<endl;
+			    else
+				   cout<<"input error" <<endl;
+				break;
+		       }
+		   case 2:
+			   {
+			   	int n;
+				cout<<"输入查找位置"<<endl;
+				cin>>n;
+				if(Search_By_Number(bl,n)==NULL) 
+				   break;
+				else
+				{
+					cout<<"书号为："<<Search_By_Number(bl,n)->number<<endl;
+				    cout<<"书名为："<<Search_By_Number(bl,n)->name<<endl;
+				    cout<<"书价格为："<<Search_By_Number(bl,n)->price<<endl;
+				    break;
+				}
+			   }
+		   case 3:
+		   	{
+		   		int n;
+				cout<<"输入插入位置"<<endl;
+				cin>>n;
+				BookInsert (bl,n);
+				break;
+		   	}
+		   case 4:
+		   	{
+		   		int n;
+				cout<<"输入删除位置"<<endl;
+				cin>>n;
+				if(BookDelete (bl,n))
+				  cout<<"删除成功"<<endl;
+				else
+				  cout<<"删除失败"<<endl;
+				break; 
+		   	}
+		   case 5:
+		   	{
+		   		cout<<"图书个数为："<<L_length(bl)<<endl;
+		   		break;
+		   	}
+		   case 6:
+		   	return 0;
+	   	}             	
+	}
+	return 0;
+}
