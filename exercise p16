@@ -1,0 +1,32 @@
+#include<iostream>
+using namespace std;
+const float PI=3.1416;
+int main ()
+{
+	int iType;
+	float radius,a,b,area;
+	
+	cout<<"图形的类型为？（1-圆形，2-矩形）：";
+	re:cin>>iType;
+	switch(iType)
+	{
+		case 1:
+			cout<<"圆半径为："; 
+			cin>>radius;
+			area=PI*radius*radius;
+			cout<<"面积为："<<area<<endl;
+			break;
+	   case 2:
+	   	    cout<<"矩形长为：";
+	   	    cin>>a;
+	   	    cout<<"矩形宽为：";
+	   	    cin>>b;
+	   	    area=a*b;
+	   	    cout<<"面积为："<<area<<endl;
+	   	    break;
+	   default:
+	   	    cout<<"输入不合法，请重新输入："<<endl;
+	   	    goto re;	 
+	} 
+
+} 
