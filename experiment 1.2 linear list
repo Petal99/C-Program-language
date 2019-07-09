@@ -1,0 +1,176 @@
+#include <iostream>
+#include <string>
+#define Maxsize 100
+#define error 0
+#define ok 1
+using namespace std;
+/*建立一个包含图书（书号，书名，定价）信息的顺序表，并具有如下功能：
+(1) 根据指定图书个数，逐个输入图书信息；
+(2) 根据书名进行查找，返回此书的书号和定价；
+(3) 根据指定的位置可返回相应的图书信息（书号，书名，定价）； 
+(4) 给定一个图书信息，插入到表中指定的位置； 
+(5) 删除指定位置的图书记录；
+(6) 统计表中图书个数。
+*/
+typedef struct {
+	int number;
+	string name;
+	float price;
+}Book;
+
+typedef struct {
+	Book *book;
+	int length;
+}SqList;
+
+int CreateBookList (SqList &L,int n)//构建长度为n的顺序表 
+{
+	if(n>Maxsize)
+	   cout<<"OVERFLOW！" <<endl; 
+	int i;
+	L.book=new Book[Maxsize];
+	if(!L.book) return error;
+	L.length=0;
+	for (i=0;i<n;i++)
+	{
+		cout<<"输入书号"<<endl;
+		cin>>L.book[i].number;
+		cout<<"输入书名"<<endl;
+		cin>>L.book[i].name;
+		cout<<"输入书价格"<<endl;
+		cin>>L.book[i].price;
+		L.length++;
+	}
+	return ok;
+}
+
+int Search_By_Name (SqList &L,string str,int n)//通过书名查找顺序表中的节点 ，若找到返回序号 
+{
+	int i;
+	for (i=0;i<n;i++)
+	{
+		if(str==L.book[i].name)
+		{
+			return i+1;
+		}
+	}
+	return error;
+}
+
+
+int Search_By_Number (SqList &L,int i)//检查是否可以去到i号元素 
+{
+	if(i<1||i>L.length) return error;
+	return ok;
+}
+
+int BookInsert (SqList &L,int i)//在制定位置插入书 
+{
+	if(i<1||(i>L.length+1)) return error;
+	int j;
+	if(L.length==Maxsize) return error;
+	for(j=L.length-1;j>=i-1;j--)
+	   L.book[j+1]=L.book[j];
+	cout<<"输入书号"<<endl;
+	cin>>L.book[i-1].number;
+	cout<<"输入书名"<<endl;
+	cin>>L.book[i-1].name;
+	cout<<"输入书价格"<<endl;
+	cin>>L.book[i-1].price;
+	L.length++;
+	return ok;
+}
+
+int BookDelete (SqList &L,int i)//删除制定序号的书 
+{
+	if(i<1||i>L.length) return error;
+	int j;
+	for (j=i;j<=L.length-1;j++)
+	   L.book[j-1]=L.book[j];
+	L.length--;
+	return ok;
+} 
+
+int Length(SqList &L) //统计书个数 
+{
+	return L.length;
+} 
+
+
+int main ()
+{
+	SqList bl;
+	int len;
+	cout<<"输入书本个数"<<endl;
+	cin>>len;
+	CreateBookList (bl,len);
+	int x;
+	cout<<"对图书列表的操作如下："<<endl;
+	while(x)
+	{
+	   cout<<"（1）据书名进行查找，返回此书的书号和定价"<<endl;
+	   cout<<"（2）根据指定的位置可返回相应的图书信息（书号，书名，定价）"<<endl;
+	   cout<<"（3）给定一个图书信息，插入到表中指定的位置"<<endl;
+	   cout<<"（4）删除指定位置的图书记录"<<endl;
+	   cout<<"（5）统计表中图书个数"<<endl;
+	   cout<<"（6）离开"<<endl;
+	   cin>>x;
+	   switch (x)
+	   	{
+	   		case 1: 
+			   {
+			   	string str;
+			   	cout<<"输入书名"<<endl;
+			   	cin>>str;
+			   	if(Search_By_Name (bl,str,bl.length))
+			   	   cout<<"书号为："<<bl.book[Search_By_Name (bl,str,bl.length)-1].number<<endl<<"书价格为："<<bl.book[Search_By_Name (bl,str,bl.length)-1].price<<endl;
+			    else
+				   cout<<"input error" <<endl;
+				break;
+		       }
+		   case 2:
+			   {
+			   	int n;
+				cout<<"输入查找位置"<<endl;
+				cin>>n;
+				if(Search_By_Number(bl,n))
+				{
+					cout<<"书号为："<<bl.book[n-1].number<<endl;
+					cout<<"书名为："<<bl.book[n-1].name<<endl;
+					cout<<"书价格为："<<bl.book[n-1].price<<endl;
+				}
+				else
+				cout<<"input error!"<<endl;
+				break;
+			   }
+		   case 3:
+		   	{
+		   		int n;
+				cout<<"输入插入位置"<<endl;
+				cin>>n;
+				BookInsert (bl,n);
+				break;
+		   	}
+		   case 4:
+		   	{
+		   		int n;
+				cout<<"输入删除位置"<<endl;
+				cin>>n;
+				if(BookDelete (bl,n))
+				  cout<<"删除成功"<<endl;
+				else
+				  cout<<"删除失败"<<endl;
+				break; 
+		   	}
+		   case 5:
+		   	{
+		   		cout<<"图书个数为："<<Length(bl)<<endl;
+		   		break;
+		   	}
+		   case 6:
+		   	return 0;
+	   	}             	
+	}
+	return 0;
+}
+
