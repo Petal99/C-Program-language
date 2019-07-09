@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <stdlib.h>
+int main()
+{
+	void paixu(int a[],int n);
+	int i,n;
+	int *array;
+	printf("输入数组长度:\n");
+	scanf("%d",&n);
+	array=(int*)calloc(n,sizeof(int));
+	printf("input %d numbers\n",n);
+	for (i=0;i<n;i++)
+	{
+		scanf("%d",(array+i));
+	}
+	paixu(array,n);
+	for (i=0;i<n;i++)
+	{
+		printf("%d\t",array[i]);
+	}
+	free(array);
+	return 0;
+}
+void paixu(int a[],int n)
+{
+	void swap(int*p1,int*p2);
+	int i,j;
+	for (i=0;i<n-1;i++)
+	{
+		for (j=0;j<n-i;j++)
+		{
+			if(*(a+j)<*(a+j+1))
+			swap(a+j,a+j+1);
+		}
+	}	
+}
+void swap (int*p1,int*p2)
+{
+	int temp;
+	temp=*p1;
+	*p1=*p2;
+	*p2=temp;
+}
